@@ -1,6 +1,6 @@
 # dsh-gensokyo-status
 
-把 DeepSeek Harness 和 DS Bot 聊天中的运行提示换成幻想乡风格文案。覆盖原生的「正在分析请求」「深度求索中」以及 DS Bot 的「权衡一下」等动态提示。在输入框下方选择模式。
+把 DeepSeek Harness 和 DS Bot 聊天中的运行提示换成幻想乡风格文案。覆盖原生的「正在分析请求」「深度求索中」以及 DS Bot 的「权衡一下」等动态提示。
 
 - `随机`：每轮在“少女祈祷中”和“少女折寿中”之间等概率选择一次。
 - `少女祈祷中`：始终显示“少女祈祷中”。
@@ -24,7 +24,7 @@ github:mirakyux/dsh-gensokyo-status
 git+https://github.com/mirakyux/dsh-gensokyo-status.git#<完整的 40 位提交 SHA>
 ```
 
-安装启用后，在聊天输入框下方的选择器中切换模式。
+安装启用后，在「设置 → 幻想乡运行状态」切换模式。
 
 ## 兼容性
 

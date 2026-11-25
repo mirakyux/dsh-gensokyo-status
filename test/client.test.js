@@ -153,7 +153,7 @@ test('replaces the native process title only while its shimmer is active', () =>
 test('renders a three-way mode selector', () => {
   const plugin = loadClient();
   const control = plugin.ModeControl();
-  const select = control.children[0];
+  const select = control.children[1];
   assert.equal(select.type, 'select');
   assert.equal(select.props['aria-label'], '幻想乡运行状态');
   assert.deepEqual(Array.from(select.children, option => option.children[0]), [
@@ -161,4 +161,23 @@ test('renders a three-way mode selector', () => {
     '少女祈祷中',
     '少女折寿中',
   ]);
+});
+
+test('registers the mode selector in the shared DSH settings', () => {
+  const plugin = loadClient();
+  plugin.apply({
+    effect() {},
+    slots: {
+      inject(name, register) {
+        assert.equal(name, 'settings.section');
+        register();
+      },
+      register(options, component) {
+        assert.equal(options.name, 'settings.section');
+        assert.equal(options.id, 'gensokyo-status');
+        assert.equal(options.label, '幻想乡运行状态');
+        assert.equal(component, plugin.ModeControl);
+      },
+    },
+  });
 });
