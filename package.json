@@ -1,0 +1,58 @@
+{
+  "name": "dsh-gensokyo-status",
+  "version": "0.1.0",
+  "description": "Replace DeepSeek Harness running text with configurable Gensokyo-style status messages.",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "gensokyo",
+    "touhou-project",
+    "running-status"
+  ],
+  "author": "mirakyux",
+  "license": "MIT",
+  "homepage": "https://github.com/mirakyux/dsh-gensokyo-status#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirakyux/dsh-gensokyo-status.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mirakyux/dsh-gensokyo-status/issues"
+  },
+  "type": "module",
+  "main": "./lib/index.js",
+  "icon": "./icon.png",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./icon": "./icon.png",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/",
+    "cordis.patch.yml",
+    "icon.png",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "dsh": ">=0.2.2-rc.3 <0.3.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node --test test/client.test.js",
+    "check": "node --check lib/index.js && node --check lib/client.js && node --test test/client.test.js"
+  }
+}

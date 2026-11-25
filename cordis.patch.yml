@@ -1,0 +1,4 @@
+# Register the host shell; DSH discovers the browser half from package.json.
+- insert:
+    - id: gensokyo-status
+      name: 'dsh-gensokyo-status'
