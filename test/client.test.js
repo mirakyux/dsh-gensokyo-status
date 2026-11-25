@@ -47,6 +47,12 @@ function text(value) {
   return { nodeType: 3, nodeValue: value, childNodes: [] };
 }
 
+test('ships an icon within the desktop plugin manager size limit', () => {
+  const manifest = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url)));
+  const icon = fs.statSync(new URL(`../${manifest.icon}`, import.meta.url));
+  assert.ok(icon.size <= 256 * 1024, `icon is ${icon.size} bytes`);
+});
+
 test('normalizes unknown values to random', () => {
   const { normalizeMode, MODES } = loadClient().__internals;
   assert.equal(normalizeMode('praying'), MODES.praying);

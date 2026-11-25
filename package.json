@@ -1,6 +1,6 @@
 {
   "name": "dsh-gensokyo-status",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Replace DeepSeek Harness running text with configurable Gensokyo-style status messages.",
   "keywords": [
     "deepseek-harness",
