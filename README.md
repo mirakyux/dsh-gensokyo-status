@@ -1,6 +1,6 @@
 # dsh-gensokyo-status
 
-把 DeepSeek Harness 的主运行提示替换成幻想乡风格文案，并在输入框下方提供三种模式：
+把 DeepSeek Harness 和 DS Bot 聊天中的运行提示换成幻想乡风格文案。覆盖原生的「正在分析请求」「深度求索中」以及 DS Bot 的「权衡一下」等动态提示。在输入框下方选择模式。
 
 - `随机`：每轮在“少女祈祷中”和“少女折寿中”之间等概率选择一次。
 - `少女祈祷中`：始终显示“少女祈祷中”。
@@ -12,13 +12,13 @@
 
 ## 安装
 
-在 DeepSeek Harness 中打开“插件”，选择从 GitHub 安装，然后输入：
+在 DeepSeek Harness 中打开「插件」，选择从 GitHub 安装并输入以下地址。
 
 ```text
 github:mirakyux/dsh-gensokyo-status
 ```
 
-也可以使用固定提交安装，以获得可复现的版本：
+需要固定版本时，使用完整提交 SHA。
 
 ```text
 git+https://github.com/mirakyux/dsh-gensokyo-status.git#<完整的 40 位提交 SHA>
@@ -28,10 +28,10 @@ git+https://github.com/mirakyux/dsh-gensokyo-status.git#<完整的 40 位提交 
 
 ## 兼容性
 
-- 已适配：DeepSeek Harness `0.2.2-rc.3`
-- 声明范围：`>=0.2.2-rc.3 <0.3.0`
+- DeepSeek Harness `0.2.2-rc.3`。插件声明范围为 `>=0.2.2-rc.3 <0.3.0`。
+- DS Bot `0.3.10` 为可选插件。
 
-DSH 暂未为主运行提示提供专用 Slot，因此插件监听官方组件的稳定标记 `[data-chat-running]`。DSH 升级后如果该标记发生变化，插件需要同步适配。
+插件依赖 DSH 和 DS Bot 的运行提示元素。相关界面结构在升级后发生变化时，插件可能需要适配。
 
 ## 隐私与权限
 
@@ -47,13 +47,13 @@ npm pack --dry-run
 
 ## 许可与声明
 
-代码和仓库内图标采用 [MIT License](./LICENSE)。这是非官方的东方 Project 同人插件，与上海爱丽丝幻乐团、ZUN 或 DeepSeek 官方无关。东方 Project 及其角色相关权利归原权利人所有。
+插件代码采用 [MIT License](./LICENSE)。插件图标取自用户提供的博丽灵梦同人图。东方 Project 及其角色相关权利归原权利人所有。
 
 ---
 
 ## English
 
-Replaces the main DeepSeek Harness running indicator with one of two Gensokyo-style messages. Choose a fixed message or let the plugin pick once per run. The selected mode is stored locally in the active DSH profile.
+Replaces live status captions in DeepSeek Harness and DS Bot with Gensokyo-themed messages. Choose a fixed message or let the plugin pick once per run. The selected mode is stored locally in the active DSH profile.
 
 The plugin targets DSH `>=0.2.2-rc.3 <0.3.0`, makes no network requests, and does not read conversations, files, account data, or secrets.
 

@@ -73,27 +73,75 @@ test('keeps a random choice stable for one running container', () => {
   assert.equal(selector.forContainer(container, 'random'), LABELS.lifespan);
 });
 
-test('rewrites visible and assistive text without touching whitespace', () => {
-  const { rewriteRunning, LABELS } = loadClient().__internals;
+function statusRoot(...childNodes) {
+  return {
+    nodeType: 1,
+    childNodes,
+    querySelectorAll() { return childNodes.filter(node => node.getAttribute); },
+  };
+}
+
+test('updates native visible, highlighted and assistive text, then restores it', () => {
+  const { rewriteRunning, restoreContainer, LABELS } = loadClient().__internals;
   const visible = text('深度求索中，用时 3 秒 ···');
   const assistive = text('深度求索中');
   const whitespace = text('  ');
-  const attributes = {};
+  const highlight = {
+    nodeType: 1,
+    value: visible.nodeValue,
+    getAttribute() { return this.value; },
+    setAttribute(_name, value) { this.value = value; },
+  };
   const container = {
-    childNodes: [
-      { nodeType: 1, childNodes: [visible] },
-      whitespace,
-      { nodeType: 1, childNodes: [assistive] },
-    ],
-    setAttribute(name, value) { attributes[name] = value; },
+    matches() { return false; },
+    querySelectorAll() { return [statusRoot(visible, highlight, whitespace), statusRoot(assistive)]; },
   };
 
-  assert.equal(rewriteRunning(container, LABELS.lifespan), 2);
+  rewriteRunning(container, LABELS.lifespan);
   assert.equal(visible.nodeValue, LABELS.lifespan);
   assert.equal(assistive.nodeValue, LABELS.lifespan);
+  assert.equal(highlight.value, LABELS.lifespan);
   assert.equal(whitespace.nodeValue, '  ');
-  assert.equal(attributes['data-gensokyo-status'], LABELS.lifespan);
-  assert.equal(rewriteRunning(container, LABELS.lifespan), 0);
+  visible.nodeValue = '深度求索中，用时 4 秒 ···';
+  rewriteRunning(container, LABELS.praying);
+  restoreContainer(container);
+  assert.equal(visible.nodeValue, '深度求索中，用时 4 秒 ···');
+  assert.equal(assistive.nodeValue, '深度求索中');
+  assert.equal(highlight.value, '深度求索中，用时 3 秒 ···');
+});
+
+test('replaces the DS Bot caption while preserving its elapsed time', () => {
+  const { rewriteRunning, LABELS } = loadClient().__internals;
+  const caption = text('权衡一下…');
+  const elapsed = text('· 1s');
+  const container = {
+    matches(selector) { return selector === '.bt-typing'; },
+    querySelectorAll(selector) {
+      assert.equal(selector, '.bt-typing-label > .bt-shimmer');
+      return [statusRoot(caption)];
+    },
+    childNodes: [statusRoot(caption), statusRoot(elapsed)],
+  };
+  rewriteRunning(container, LABELS.praying);
+  assert.equal(caption.nodeValue, LABELS.praying);
+  assert.equal(elapsed.nodeValue, '· 1s');
+});
+
+test('replaces the native process title only while its shimmer is active', () => {
+  const { rewriteRunning, LABELS } = loadClient().__internals;
+  const active = text('正在分析请求');
+  const settled = text('已完成分析');
+  const title = value => ({
+    matches(selector) { return selector === '[data-process-activity]'; },
+    querySelectorAll(selector) {
+      assert.equal(selector, ':scope > [data-shimmer]');
+      return value === active ? [statusRoot(value)] : [];
+    },
+  });
+  rewriteRunning(title(active), LABELS.praying);
+  rewriteRunning(title(settled), LABELS.praying);
+  assert.equal(active.nodeValue, LABELS.praying);
+  assert.equal(settled.nodeValue, '已完成分析');
 });
 
 test('renders a three-way mode selector', () => {
