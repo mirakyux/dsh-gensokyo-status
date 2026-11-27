@@ -1,0 +1,22 @@
+[
+  {"id":"yuuma","name":"饕餮尤魔","group":"东方刚欲异闻","motif":"贪欲的巨叉","path":"M3 21L13 11M10 10L14 14M11 11Q8 9 11 6L14 3M13 12L19 5M15 13Q17 15 19 12L22 8","color":"#89B7BC","motion":"swing"},
+  {"id":"mike","name":"豪德寺三花","group":"东方虹龙洞","motif":"招财猫举起的前爪","path":"M3 20V13Q3 10 6 10Q9 10 8 13L7 16M8 12L9 5L12 8Q14 7 16 8L20 5L20 13Q19 18 14 18Q12 18 10 17M11 20Q15 22 20 20M12 12H12.3M17 12H17.3","color":"#C49D7E","motion":"swing"},
+  {"id":"takane","name":"山城高岭","group":"东方虹龙洞","motif":"山童的迷彩帽","path":"M3 15L6 8Q8 4 14 5Q19 5 20 12L22 14L18 16Q12 14 6 17L2 17ZM8 7L10 10L7 12M15 6L13 9L16 11M19 13Q12 10 6 14","color":"#7DA782","motion":"swing"},
+  {"id":"sannyo","name":"驹草山如","group":"东方虹龙洞","motif":"山姥太夫的烟管","path":"M3 17L12 14L17 10L20 10L19 15L13 17L4 20ZM16 8Q15 6 18 5Q21 4 19 2M13 9Q10 7 12 5","color":"#AF88AE","motion":"float"},
+  {"id":"misumaru","name":"玉造魅须丸","group":"东方虹龙洞","motif":"勾玉","path":"M17 3Q22 5 21 10Q21 17 13 21Q8 22 4 19Q11 19 12 14Q5 13 7 7Q9 2 17 3ZM11 8A2.5 2.5 0 1 0 16 8A2.5 2.5 0 1 0 11 8","color":"#79B7A7","motion":"spin"},
+  {"id":"tsukasa","name":"菅牧典","group":"东方虹龙洞","motif":"竹管中的管狐","path":"M3 17L8 11L13 16L7 22ZM8 11L9 7L8 3L13 6L17 2L17 7Q21 8 21 10Q19 13 15 13L12 15M17 8H17.3M4 18L7 21","color":"#C8AD77","motion":"swing"},
+  {"id":"megumu","name":"饭纲丸龙","group":"东方虹龙洞","motif":"天文望远镜","path":"M3 11L15 4L19 10L7 16ZM15 4L18 2L22 8L19 10M10 15L14 14L17 21M13 15L9 21","color":"#879ACB","motion":"swing"},
+  {"id":"chimata","name":"天弓千亦","group":"东方虹龙洞","motif":"虹市的拱虹与价签","path":"M2 16Q3 5 13 5Q17 5 20 9M6 16Q6 9 13 9Q15 9 17 10M11 16Q11 13 14 13M13 17L18 12H22V16L17 21ZM19 14H19.4","color":"#A896C9","motion":"float"},
+  {"id":"momoyo","name":"姬虫百百世","group":"东方虹龙洞","motif":"矿洞的镐","path":"M4 21L14 8M10 5Q16 2 22 7Q16 5 13 10Q9 14 4 14Q8 10 10 5ZM3 18L5 16","color":"#A89783","motion":"swing"},
+  {"id":"biten","name":"孙美天","group":"东方兽王园","motif":"如意棒与筋斗云","path":"M4 20L18 3L21 5L7 22ZM5 18L9 20M16 5L19 8M2 11Q3 8 6 9Q7 5 11 7M14 17Q16 14 18 16Q22 14 22 18","color":"#C5A365","motion":"swing"},
+  {"id":"enoko","name":"三头慧之子","group":"东方兽王园","motif":"两腕的兽夹","path":"M2 9L5 12L7 8L9 12L12 8L15 12L18 8L20 12L22 9Q22 18 15 19L12 16L9 19Q2 17 2 9ZM9 20L12 22L15 20","color":"#A4A181","motion":"swing"},
+  {"id":"chiyari","name":"天火人血枪","group":"东方兽王园","motif":"装着血液的试管","path":"M6 4L13 7M7 5L2.5 15Q1 19 5 20Q8 21 9 18L13 7M5 12L10 14M15 3L22 6M16 4L13 12Q12 15 15 16Q18 17 19 14L22 6M15 10L20 12","color":"#B8798E","motion":"swing"},
+  {"id":"hisami","name":"豫母都日狭美","group":"东方兽王园","motif":"遮面的葡萄藤","path":"M4 6Q12 1 19 7L21 19Q15 16 12 21Q8 16 3 19ZM6 7Q12 9 17 6M10 10Q15 8 17 5M10 11A2 2 0 1 0 14 11A2 2 0 1 0 10 11M12 14Q13 17 15 14","color":"#A083B8","motion":"swing"},
+  {"id":"zanmu","name":"日白残无","group":"东方兽王园","motif":"鬼僧的角与念珠","path":"M4 9Q8 7 8 2L11 9M15 9L18 3Q18 7 20 9M4 13Q5 20 12 21Q20 21 21 13M4 13A2 2 0 1 0 8 13A2 2 0 1 0 4 13M9 18A2 2 0 1 0 13 18A2 2 0 1 0 9 18M16 15A2 2 0 1 0 20 15A2 2 0 1 0 16 15","color":"#AC889C","motion":"swing"},
+  {"id":"ubame","name":"尘塚姥芽","group":"东方锦上京","motif":"守护的圣域山林","path":"M2 18L6 12L4 12L9 5L13 12H11L15 18ZM8 18V21M13 6L16 2L20 9H18L22 15H17M17 15V19","color":"#A8A16C","motion":"swing"},
+  {"id":"chimi","name":"封兽魑魅","group":"东方锦上京","motif":"山河之气与长耳","path":"M3 14Q4 8 8 10Q4 4 6 3Q9 3 12 8Q15 3 18 3Q20 4 16 10Q20 9 21 13M2 17Q7 12 12 16Q17 19 22 15M5 21Q8 18 12 20","color":"#B997A1","motion":"float"},
+  {"id":"nareko","name":"道神驯子","group":"东方锦上京","motif":"金字塔前的道祖神","path":"M2 18L12 3L22 18ZM12 3L15 18M7 13L12 5M8 21V10H11V21M6 12H13","color":"#BD9B7C","motion":"swing"},
+  {"id":"yuiman","name":"维缦·浅间","group":"东方锦上京","motif":"吞食污秽的蛇","path":"M3 19Q7 19 9 16Q11 13 16 13Q22 12 20 7Q19 4 16 5L14 7L17 9L19 8M4 15Q6 12 10 11Q14 10 14 7M8 20Q12 16 16 17M17 6.5H17.3","color":"#92B1CB","motion":"swing"},
+  {"id":"ariya","name":"磐永阿梨夜","group":"东方锦上京","motif":"守护神社的磐石","path":"M3 18L5 10L10 5L17 5L21 11L20 18ZM5 10L10 11L12 6M10 11L8 17M12 20H18M15 10L18 13L16 17","color":"#A59DAF","motion":"pulse"},
+  {"id":"nina","name":"渡里贝子","group":"东方锦上京","motif":"吐出海市蜃楼的蜃贝","path":"M3 15Q6 7 11 9Q16 5 21 13L12 18ZM3 15Q11 23 21 13M11 17L7 12M13 16L16 11M7 6Q7 4 10 5Q12 6 13 3M15 5Q18 6 20 3","color":"#68B7BC","motion":"float"}
+]

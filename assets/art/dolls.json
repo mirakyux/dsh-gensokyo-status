@@ -1,0 +1,6 @@
+[
+  {"id":"shanghai","name":"上海人偶","group":"爱丽丝的人偶","motif":"发射光束的小人偶","path":"M5 8Q3 4 6 4L9 6L13 3L14 7M5 9Q5 6 10 7Q13 7 12 11Q10 14 7 12ZM7 14L4 20H14L11 14M14 12L21 9M16 15L22 13","color":"#BC9C6D","motion":"swing"},
+  {"id":"hourai","name":"蓬莱人偶","group":"爱丽丝的人偶","motif":"符卡中的悬丝人偶","path":"M11 2V6M7 10A4 4 0 1 0 15 10A4 4 0 1 0 7 10M9 14L5 19L16 21L13 14M6 14L3 12M14 15L18 13M18 3L19 6L22 7L19 8L18 11L17 8L15 7L17 6Z","color":"#AD8FB8","motion":"swing"},
+  {"id":"titania","name":"提泰妮娅","group":"爱丽丝的人偶","motif":"试验中的大型人偶","path":"M7 6Q7 3 11 3Q15 3 15 7Q15 10 11 10Q7 10 7 6ZM9 12L5 20Q10 22 17 20L13 12M13 12L17 13L19 9M8 12L4 15M17 6L19 4M19 7L22 6","color":"#BD8CAD","motion":"pulse"},
+  {"id":"goliath","name":"歌利亚人偶","group":"爱丽丝的人偶","motif":"双刃巨人偶","path":"M4 3L9 10L8 14L4 10ZM20 3L15 10L16 14L20 10ZM5 13L9 11M15 11L19 13M9 6Q11 3 14 6Q15 9 12 10Q9 10 9 6ZM10 12L6 19L12 21L18 19L14 12M8 13L6 16M16 13L18 16","color":"#B28F8F","motion":"swing"}
+]

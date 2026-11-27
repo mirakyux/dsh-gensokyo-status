@@ -1,7 +1,7 @@
 {
   "name": "dsh-gensokyo-status",
-  "version": "0.1.4",
-  "description": "Replace DeepSeek Harness running text with configurable Gensokyo-style status messages.",
+  "version": "0.2.0",
+  "description": "Animated Touhou character emblems and Gensokyo running captions for DeepSeek Harness.",
   "keywords": [
     "deepseek-harness",
     "dsh",
@@ -34,6 +34,8 @@
     "lib/",
     "cordis.patch.yml",
     "icon.png",
+    "assets/CREDITS.md",
+    "assets/preview.gif",
     "README.md",
     "LICENSE"
   ],
@@ -52,7 +54,8 @@
     "access": "public"
   },
   "scripts": {
-    "test": "node --test test/client.test.js",
-    "check": "node --check lib/index.js && node --check lib/client.js && node --test test/client.test.js"
+    "build": "node scripts/embed-characters.mjs",
+    "test": "node --test",
+    "check": "node scripts/embed-characters.mjs --check && node --check lib/index.js && node --check lib/client.js && node --test"
   }
 }

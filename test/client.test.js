@@ -3,9 +3,9 @@ import fs from 'node:fs';
 import test from 'node:test';
 import vm from 'node:vm';
 
-function loadClient(saved = []) {
+function loadClient(saved = [], hooks = {}) {
   let plugin;
-  const storage = new Map(saved);
+  const storage = saved instanceof Map ? saved : new Map(saved);
   const document = {
     nodeType: 9,
     childNodes: [],
@@ -18,6 +18,8 @@ function loadClient(saved = []) {
   const React = {
     createElement(type, props, ...children) { return { type, props: props || {}, children }; },
     useSyncExternalStore(_subscribe, getSnapshot) { return getSnapshot(); },
+    useState(initial) { return [typeof initial === 'function' ? initial() : initial, () => {}]; },
+    ...hooks,
   };
   const sandbox = {
     console,
@@ -213,4 +215,90 @@ test('registers the mode selector in the shared DSH settings', () => {
       },
     },
   });
+});
+
+function findElements(node, predicate) {
+  if (!node || typeof node !== 'object') return [];
+  if (typeof node.type === 'function') return findElements(node.type(node.props), predicate);
+  const matches = predicate(node) ? [node] : [];
+  for (const child of node.children.flat(Infinity)) matches.push(...findElements(child, predicate));
+  return matches;
+}
+
+function characterControl(plugin) {
+  const [select] = findElements(plugin.ModeControl(), node => node.props['aria-label'] === '运行角色');
+  assert.equal(select?.type, 'select');
+  return select;
+}
+
+test('lists each catalog character exactly once as a selectable option', () => {
+  const plugin = loadClient();
+  const { CHARACTERS } = plugin.__internals;
+  const options = findElements(characterControl(plugin), node => node.type === 'option');
+  const ids = Array.from(CHARACTERS, entry => entry.id);
+  assert.ok(ids.length > 1);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.deepEqual(options.map(option => option.props.value).sort(), ['random', ...ids].sort());
+  assert.equal(characterControl(plugin).props.value, 'random');
+  assert.ok(options.some(option => option.children.includes('魂魄妖梦')));
+});
+
+test('saves the selected character independently of caption and time, including after reloading', () => {
+  const saved = new Map([['dsh-gensokyo-status:mode', 'lifespan'], ['dsh-gensokyo-status:show-time', 'false']]);
+  const plugin = loadClient(saved);
+  const selected = plugin.__internals.CHARACTERS[0].id;
+  characterControl(plugin).props.onChange({ target: { value: selected } });
+  assert.equal(characterControl(plugin).props.value, selected);
+  assert.equal(characterControl(loadClient(saved)).props.value, selected);
+  assert.equal(saved.get('dsh-gensokyo-status:mode'), 'lifespan');
+  assert.equal(saved.get('dsh-gensokyo-status:show-time'), 'false');
+  plugin.ModeControl().children[0].children[1].props.onChange({ target: { value: 'praying' } });
+  plugin.ModeControl().children[1].children[0].props.onChange({ target: { checked: true } });
+  assert.equal(characterControl(plugin).props.value, selected);
+  saved.set('dsh-gensokyo-status:character', 'removed-character');
+  assert.equal(characterControl(loadClient(saved)).props.value, 'random');
+});
+
+test('draws from the whole catalog once per run, across the native and bot renderers', () => {
+  const { CHARACTERS, createCharacterSelector } = loadClient().__internals;
+  const samples = [0, 1 - Number.EPSILON];
+  const selector = createCharacterSelector(() => {
+    assert.ok(samples.length, 'unexpected reroll');
+    return samples.shift();
+  });
+  const bot = {};
+  const native = {};
+  const first = CHARACTERS[0].id;
+  const last = CHARACTERS.at(-1).id;
+  assert.equal(selector.forContainer(bot, 'random'), first);
+  assert.equal(selector.forContainer(native, 'random', bot), first);
+  assert.equal(selector.forContainer(native, 'random'), first);
+  assert.equal(selector.forContainer(native, last), last);
+  assert.equal(selector.forContainer({}, 'random'), last);
+  assert.equal(samples.length, 0);
+});
+
+test('filters the roster by name, work or motif and keeps the fixed choice visible', () => {
+  const { CHARACTERS } = loadClient().__internals;
+  const fixed = CHARACTERS.find(entry => entry.name === '魂魄妖梦');
+  const other = CHARACTERS.find(entry => entry.group !== fixed.group && entry.motif !== fixed.motif);
+  let query = '';
+  const plugin = loadClient([['dsh-gensokyo-status:character', fixed.id]], {
+    useState(initial) {
+      return typeof initial === 'function' ? [initial(), () => {}]
+        : [query, value => { query = value; }];
+    },
+  });
+  const search = value => {
+    const [input] = findElements(plugin.ModeControl(), node => node.props['aria-label'] === '搜索角色');
+    input.props.onChange({ target: { value } });
+    return findElements(characterControl(plugin), node => node.type === 'option').map(option => option.props.value);
+  };
+  for (const term of [other.name, other.group, other.motif]) {
+    const ids = search(term);
+    assert.ok(ids.includes(other.id));
+    assert.ok(ids.includes(fixed.id));
+  }
+  assert.deepEqual(search('no-such-character-999'), ['random', fixed.id]);
+  assert.equal(characterControl(plugin).props.value, fixed.id);
 });
