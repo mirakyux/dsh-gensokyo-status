@@ -3,9 +3,9 @@ import fs from 'node:fs';
 import test from 'node:test';
 import vm from 'node:vm';
 
-function loadClient() {
+function loadClient(saved = []) {
   let plugin;
-  const storage = new Map();
+  const storage = new Map(saved);
   const document = {
     nodeType: 9,
     childNodes: [],
@@ -104,9 +104,9 @@ test('updates native visible, highlighted and assistive text, then restores it',
   };
 
   rewriteRunning(container, LABELS.lifespan);
-  assert.equal(visible.nodeValue, LABELS.lifespan);
-  assert.equal(assistive.nodeValue, LABELS.lifespan);
-  assert.equal(highlight.value, LABELS.lifespan);
+  assert.equal(visible.nodeValue, '少女折寿中，用时 3 秒…');
+  assert.equal(assistive.nodeValue, '少女折寿中…');
+  assert.equal(highlight.value, '少女折寿中，用时 3 秒…');
   assert.equal(whitespace.nodeValue, '  ');
   visible.nodeValue = '深度求索中，用时 4 秒 ···';
   rewriteRunning(container, LABELS.praying);
@@ -116,44 +116,77 @@ test('updates native visible, highlighted and assistive text, then restores it',
   assert.equal(highlight.value, '深度求索中，用时 3 秒 ···');
 });
 
-test('replaces the DS Bot caption while preserving its elapsed time', () => {
-  const { rewriteRunning, LABELS } = loadClient().__internals;
+test('adds an ellipsis and toggles the separate DS Bot clock', () => {
+  const plugin = loadClient();
+  const { rewriteRunning, restoreContainer, LABELS } = plugin.__internals;
   const caption = text('权衡一下…');
   const elapsed = text('· 1s');
+  const attributes = new Set();
   const container = {
     matches(selector) { return selector === '.bt-typing'; },
     querySelectorAll(selector) {
       assert.equal(selector, '.bt-typing-label > .bt-shimmer');
       return [statusRoot(caption)];
     },
+    toggleAttribute(key, present) {
+      if (present) attributes.add(key);
+      else attributes.delete(key);
+    },
+    removeAttribute(key) { attributes.delete(key); },
     childNodes: [statusRoot(caption), statusRoot(elapsed)],
   };
   rewriteRunning(container, LABELS.praying);
-  assert.equal(caption.nodeValue, LABELS.praying);
+  assert.equal(caption.nodeValue, '少女祈祷中…');
   assert.equal(elapsed.nodeValue, '· 1s');
+  assert.equal(attributes.has('data-gensokyo-hide-time'), false);
+  plugin.ModeControl().children[1].children[0].props.onChange({ target: { checked: false } });
+  rewriteRunning(container, LABELS.praying);
+  assert.equal(attributes.has('data-gensokyo-hide-time'), true);
+  restoreContainer(container);
+  assert.equal(caption.nodeValue, '权衡一下…');
+  assert.equal(attributes.has('data-gensokyo-hide-time'), false);
 });
 
-test('replaces the native process title only while its shimmer is active', () => {
-  const { rewriteRunning, LABELS } = loadClient().__internals;
-  const active = text('正在分析请求');
-  const settled = text('已完成分析');
-  const title = value => ({
-    matches(selector) { return selector === '[data-process-activity]'; },
-    querySelectorAll(selector) {
-      assert.equal(selector, ':scope > [data-shimmer]');
-      return value === active ? [statusRoot(value)] : [];
-    },
-  });
-  rewriteRunning(title(active), LABELS.praying);
-  rewriteRunning(title(settled), LABELS.praying);
-  assert.equal(active.nodeValue, LABELS.praying);
-  assert.equal(settled.nodeValue, '已完成分析');
+test('formats a host duration with one trailing ellipsis', () => {
+  const { formatCaption } = loadClient().__internals;
+  assert.equal(formatCaption('少女祈祷中', '深度求索中，用时8分22秒···', true), '少女祈祷中，用时 8分22秒…');
+  assert.equal(formatCaption('少女祈祷中', 'Deep diving for 1h 8m 22s ···', true), '少女祈祷中，用时 1h 8m 22s…');
+  assert.equal(formatCaption('少女祈祷中', '深度求索中，用时8分22秒···', false), '少女祈祷中…');
+  assert.equal(formatCaption('少女祈祷中', '深度求索中', true), '少女祈祷中…');
+});
+
+test('hiding then showing elapsed time preserves the latest host tick', () => {
+  const plugin = loadClient();
+  const { rewriteRunning, LABELS } = plugin.__internals;
+  const visible = text('深度求索中，用时8分22秒···');
+  const container = {
+    matches() { return false; },
+    querySelectorAll() { return [statusRoot(visible)]; },
+  };
+  const setTime = checked => plugin.ModeControl().children[1].children[0].props.onChange({ target: { checked } });
+  rewriteRunning(container, LABELS.praying);
+  setTime(false);
+  visible.nodeValue = '深度求索中，用时8分23秒···';
+  rewriteRunning(container, LABELS.praying);
+  assert.equal(visible.nodeValue, '少女祈祷中…');
+  setTime(true);
+  rewriteRunning(container, LABELS.praying);
+  assert.equal(visible.nodeValue, '少女祈祷中，用时 8分23秒…');
+});
+
+test('keeps saved caption modes and defaults the new time setting to on', () => {
+  const plugin = loadClient([['dsh-gensokyo-status:mode', 'lifespan']]);
+  const control = plugin.ModeControl();
+  assert.equal(control.children[0].children[1].props.value, 'lifespan');
+  assert.equal(control.children[1].children[0].props.checked, true);
+  const savedOff = loadClient([['dsh-gensokyo-status:show-time', 'false']]);
+  assert.equal(savedOff.ModeControl().children[1].children[0].props.checked, false);
 });
 
 test('renders a three-way mode selector', () => {
   const plugin = loadClient();
   const control = plugin.ModeControl();
-  const select = control.children[1];
+  const select = control.children[0].children[1];
   assert.equal(select.type, 'select');
   assert.equal(select.props['aria-label'], '幻想乡运行状态');
   assert.deepEqual(Array.from(select.children, option => option.children[0]), [
