@@ -1,6 +1,6 @@
 {
   "name": "dsh-gensokyo-status",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Animated Touhou character emblems and Gensokyo running captions for DeepSeek Harness.",
   "keywords": [
     "deepseek-harness",
